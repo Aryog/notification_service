@@ -58,64 +58,81 @@ export default function Home() {
   };
 
   return (
-    <main className="p-10">
-      <h1 className="text-4xl mb-4 font-bold">Firebase Cloud Messaging Demo</h1>
-
-      {notificationPermissionStatus === "granted" ? (
-        <p className="mb-4">Permission to receive notifications has been granted.</p>
-      ) : notificationPermissionStatus !== null ? (
-        <p className="mb-4">
-          You have not granted permission to receive notifications. Please
-          enable notifications in your browser settings.
-        </p>
-      ) : null}
-
-      <div className="grid gap-8">
-        <div className="max-w-md space-y-4">
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium mb-1">
-              Notification Title
-            </label>
-            <Input
-              id="title"
-              value={notificationData.title}
-              onChange={(e) =>
-                setNotificationData(prev => ({ ...prev, title: e.target.value }))
-              }
-              placeholder="Enter notification title"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium mb-1">
-              Notification Message
-            </label>
-            <Textarea
-              id="message"
-              value={notificationData.message}
-              onChange={(e) =>
-                setNotificationData(prev => ({ ...prev, message: e.target.value }))
-              }
-              placeholder="Enter your notification message"
-              className="min-h-[100px]"
-            />
-          </div>
-
-          <Button
-            disabled={!selectedTokens.length || !notificationData.title || !notificationData.message}
-            className="w-full"
-            onClick={handleTestNotification}
-          >
-            Send to Selected Devices ({selectedTokens.length})
-          </Button>
+    <main className="min-h-screen bg-background p-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            Firebase Cloud Messaging Demo
+          </h1>
+          {notificationPermissionStatus === "granted" ? (
+            <p className="text-emerald-400">
+              ✓ Notifications enabled
+            </p>
+          ) : notificationPermissionStatus !== null ? (
+            <p className="text-yellow-400">
+              ⚠️ Please enable notifications in your browser settings
+            </p>
+          ) : null}
         </div>
 
-        <div className="border-t pt-8">
-          <h2 className="text-2xl font-bold mb-4">Manage Devices</h2>
-          <TokenList
-            currentToken={token}
-            onSelectTokens={setSelectedTokens}
-          />
+        <div className="grid lg:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <div className="p-6 rounded-lg border border-border bg-card">
+              <h2 className="text-xl font-semibold mb-4">Send Notification</h2>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="title" className="block text-sm font-medium mb-1 text-muted-foreground">
+                    Notification Title
+                  </label>
+                  <Input
+                    id="title"
+                    value={notificationData.title}
+                    onChange={(e) =>
+                      setNotificationData(prev => ({ ...prev, title: e.target.value }))
+                    }
+                    placeholder="Enter notification title"
+                    className="bg-background"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium mb-1 text-muted-foreground">
+                    Notification Message
+                  </label>
+                  <Textarea
+                    id="message"
+                    value={notificationData.message}
+                    onChange={(e) =>
+                      setNotificationData(prev => ({ ...prev, message: e.target.value }))
+                    }
+                    placeholder="Enter your notification message"
+                    className="min-h-[100px] bg-background"
+                  />
+                </div>
+
+                <Button
+                  disabled={!selectedTokens.length || !notificationData.title || !notificationData.message}
+                  className="w-full text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-purple-600"
+                  onClick={handleTestNotification}
+                >
+                  {!selectedTokens.length
+                    ? "Select devices to send notification"
+                    : `Send to Selected Devices (${selectedTokens.length})`
+                  }
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="p-6 rounded-lg border border-border bg-card">
+              <h2 className="text-xl font-semibold mb-4">Manage Devices</h2>
+              <TokenList
+                currentToken={token}
+                onSelectTokens={setSelectedTokens}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </main>
